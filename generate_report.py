@@ -42,24 +42,9 @@ def add_normal_para(text):
     p.paragraph_format.space_after = Pt(6)
     return p
 
-SCREENSHOT_DIR = '/projects/sandbox/summa2'
-
 def add_figure_placeholder(caption, image_file=None):
-    """If image_file is provided and exists, embed the actual screenshot.
-    Otherwise leave a text placeholder for the user to insert one later."""
-    if image_file:
-        img_path = os.path.join(SCREENSHOT_DIR, image_file)
-        if os.path.exists(img_path):
-            p = doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            run = p.add_run()
-            run.add_picture(img_path, width=Inches(5.5))
-            cap = doc.add_paragraph()
-            cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            crun = cap.add_run(caption)
-            crun.italic = True
-            crun.font.size = Pt(11)
-            return cap
+    """Always leaves a text-only placeholder for the user to insert a screenshot later.
+    The image_file argument is accepted (and ignored) so existing call sites don't break."""
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = p.add_run(f'\n{caption}\n(Insert Screenshot Here)\n')
@@ -1381,6 +1366,6 @@ for ref in references:
     add_normal_para(ref)
 
 # ============ SAVE DOCUMENT ============
-output_path = '/projects/sandbox/summa2/FinGenius_AI_Mini_Project_Viva_Report_NEW.docx'
+output_path = '/projects/sandbox/summa2/FinGenius_AI_Mini_Project_Viva_Report_Generated.docx'
 doc.save(output_path)
 print(f'Report saved to {output_path}')
