@@ -1,10 +1,10 @@
 """
-Generates FinGenius_AI_Seminar_Presentation.pptx using a DARK GLASSMORPHISM
-theme that matches the actual FinGenius AI product branding (indigo / green /
-amber accents on a deep navy-black background with translucent "glass" cards),
-while keeping the same overall slide FORMAT used previously: a fixed
-header/footer chrome on every slide, side-by-side panels, a chained
-step-diagram, styled tables, and screenshot panels.
+Generates FinGenius_AI_Seminar_Presentation.pptx using a LIGHT, CLEAN theme
+that still uses FinGenius AI's own product accent colors (indigo / green /
+amber) but on white / very light backgrounds instead of a dark canvas, while
+keeping the same overall slide FORMAT used previously: a fixed header/footer
+chrome on every slide, side-by-side panels, a chained step-diagram, styled
+tables, and screenshot panels.
 """
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
@@ -16,17 +16,19 @@ import os
 OUTPUT = '/projects/sandbox/summa2/FinGenius_AI_Seminar_Presentation.pptx'
 SCREEN_DIR = '/projects/sandbox/summa2'
 
-# ---- Design tokens: FinGenius AI's own product palette (dark glass UI) ----
-BG_DARK = RGBColor.from_string('0F1120')       # deep space background
-BG_PANEL = RGBColor.from_string('1A1D33')      # glass card background
-BG_PANEL_ALT = RGBColor.from_string('20233F')  # alternate glass card
-INDIGO = RGBColor.from_string('6366F1')        # primary brand color
-GREEN = RGBColor.from_string('22C55E')         # MERN / success accent
-AMBER = RGBColor.from_string('F59E0B')         # AI accent
-BORDER = RGBColor.from_string('353A5C')        # subtle card border
-TEXT_LIGHT = RGBColor.from_string('F1F3FF')    # primary text on dark
-TEXT_MUTED = RGBColor.from_string('9CA3C7')    # secondary text on dark
+# ---- Design tokens: FinGenius AI's product palette, adapted for a LIGHT theme ----
+BG_DARK = RGBColor.from_string('FFFFFF')       # slide background (white)
+BG_PANEL = RGBColor.from_string('F6F7FC')      # light card background
+BG_PANEL_ALT = RGBColor.from_string('ECEEFA')  # alternate light card / table stripe
+INDIGO = RGBColor.from_string('4F46E5')        # primary brand color (slightly deeper for contrast on white)
+GREEN = RGBColor.from_string('16A34A')         # MERN / success accent
+AMBER = RGBColor.from_string('D97706')         # AI accent
+BORDER = RGBColor.from_string('DDE1F2')        # subtle light card border
+TEXT_LIGHT = RGBColor.from_string('1E2140')    # primary text (dark navy-charcoal on light bg)
+TEXT_MUTED = RGBColor.from_string('64708A')    # secondary / muted text on light bg
 WHITE = RGBColor.from_string('FFFFFF')
+HERO_TINT = RGBColor.from_string('EEF0FD')     # soft indigo tint for the title-slide hero band
+FOOTER_BG = RGBColor.from_string('F1F2FA')     # very light footer strip
 
 FONT = 'Calibri'
 FOOTER_LINE = 'FinGenius AI  \u2022  M.Tech Mini Project  \u2022  [Student Name]  \u2022  [College Name]'
@@ -107,18 +109,19 @@ def _textbox(slide, l, t, w, h, runs, align=PP_ALIGN.LEFT, anchor=None, line_spa
 
 
 def add_header_footer(slide, eyebrow, title, page_num, accent=INDIGO):
-    """Dark chrome: full dark background, a slim accent-colored top rule,
-    eyebrow label + title in the top band, and a footer strip with credit
-    line + page number - same FORMAT as before but restyled dark/glass."""
+    """Light chrome: white background, a slim accent-colored top rule,
+    eyebrow label + title in the top band, and a light footer strip with
+    credit line + page number - same FORMAT as before but restyled light."""
     _rect(slide, 0, 0, SLIDE_W_IN, SLIDE_H_IN, BG_DARK)
     _rect(slide, 0, 0, SLIDE_W_IN, 0.09, accent)
     _textbox(slide, 0.55, 0.35, 9.5, 0.32, [(eyebrow, 12.5, True, accent)])
     _textbox(slide, 0.55, 0.66, 9.6, 0.6, [(title, 24, True, TEXT_LIGHT)])
     _rect(slide, 0, 1.38, SLIDE_W_IN, 0.02, BORDER)
 
-    _rect(slide, 0, 7.16, SLIDE_W_IN, 0.34, RGBColor.from_string('090A16'))
-    _textbox(slide, 0.45, 7.16, 9.5, 0.261, [(FOOTER_LINE, 9.5, False, TEXT_MUTED)])
-    _textbox(slide, 12.133, 7.16, 0.75, 0.34, [(str(page_num), 9.5, True, accent)], align=PP_ALIGN.RIGHT)
+    _rect(slide, 0, 7.16, SLIDE_W_IN, 0.34, FOOTER_BG)
+    _rect(slide, 0, 7.16, SLIDE_W_IN, 0.02, BORDER)
+    _textbox(slide, 0.45, 7.19, 9.5, 0.261, [(FOOTER_LINE, 9.5, False, TEXT_MUTED)])
+    _textbox(slide, 12.133, 7.19, 0.75, 0.28, [(str(page_num), 9.5, True, accent)], align=PP_ALIGN.RIGHT)
 
 
 def add_content_slide(eyebrow, title, accent=INDIGO):
@@ -319,18 +322,19 @@ def add_pill_header(slide, l, t, w, text, fill):
 
 
 # =====================================================================
-# SLIDE 1 - TITLE SLIDE (dark hero background, indigo glow accent bar,
-# glass "presented by" card - same layout role as before, restyled dark)
+# SLIDE 1 - TITLE SLIDE (white background, soft indigo-tinted hero band,
+# glass "presented by" card - same layout role as before, restyled light)
 # =====================================================================
 title_slide = prs.slides.add_slide(blank_layout)
 _rect(title_slide, 0, 0, SLIDE_W_IN, SLIDE_H_IN, BG_DARK)
+_rect(title_slide, 0, 0, SLIDE_W_IN, 4.55, HERO_TINT)
 _rect(title_slide, 0, 0, SLIDE_W_IN, 0.09, INDIGO)
 _rect(title_slide, 0, 4.55, SLIDE_W_IN, 0.03, GREEN)
 
 _textbox(title_slide, 0.6, 1.7, 12.1, 0.353, [('M.TECH MINI PROJECT', 15, True, AMBER)])
 _textbox(title_slide, 0.6, 2.1, 12.1, 1.55,
-         [[('FinGenius AI', 40, True, TEXT_LIGHT)],
-          [('Smart Personal Finance Tracker Powered by Gemini AI', 22, True, RGBColor.from_string('C7CCF5'))]],
+         [[('FinGenius AI', 40, True, INDIGO)],
+          [('Smart Personal Finance Tracker Powered by Gemini AI', 22, True, TEXT_LIGHT)]],
          line_spacing=1.1)
 _textbox(title_slide, 0.6, 3.65, 12.1, 0.5,
          [('MERN Stack  \u2022  Budgets  \u2022  Goals  \u2022  Analytics  \u2022  AI Chat  \u2022  Receipt OCR  \u2022  Voice Entry', 15, False, TEXT_MUTED)])
